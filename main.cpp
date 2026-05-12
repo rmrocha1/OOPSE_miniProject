@@ -51,7 +51,9 @@ while(1) {
         cout << "|| [2] - Take out                               ||" << endl;
         cout << "||                                              ||" << endl;
         cout << "==================================================" << endl;
-        cin >> user_input; input_idx = stoi(user_input);
+        cin >> user_input;
+        try { input_idx = stoi(user_input); }
+        catch(invalid_argument) { cout << "Invalid argument" << endl; }
 
         // Input handler
         switch(input_idx) {
@@ -89,7 +91,9 @@ while(1) {
         cout << "|| [6] - Go to checkout                         ||" << endl;
         cout << "||                                              ||" << endl;
         cout << "==================================================" << endl;
-        cin >> user_input; input_idx = stoi(user_input);
+        cin >> user_input; 
+        try { input_idx = stoi(user_input); }
+        catch(invalid_argument) { cout << "Invalid argument" << endl; }
 
         // Input handler
         switch(input_idx) {
@@ -140,7 +144,9 @@ while(1) {
         cout << "|| [5] - Go to checkout                         ||" << endl;
         cout << "||                                              ||" << endl;
         cout << "==================================================" << endl;
-        cin >> user_input; input_idx = stoi(user_input);
+        cin >> user_input;
+        try { input_idx = stoi(user_input); }
+        catch(invalid_argument) { cout << "Invalid argument" << endl; }
 
         // Input handler
         switch(input_idx) {
@@ -185,7 +191,9 @@ while(1) {
         cout << "|| [5] - Go to checkout                         ||" << endl;
         cout << "||                                              ||" << endl;
         cout << "==================================================" << endl;
-        cin >> user_input; input_idx = stoi(user_input);
+        cin >> user_input;
+        try { input_idx = stoi(user_input); }
+        catch(invalid_argument) { cout << "Invalid argument" << endl; }
 
         // Input handler
         switch(input_idx) {
@@ -230,7 +238,9 @@ while(1) {
         cout << "|| [5] - Go to checkout                         ||" << endl;
         cout << "||                                              ||" << endl;
         cout << "==================================================" << endl;
-        cin >> user_input; input_idx = stoi(user_input);
+        cin >> user_input;
+        try { input_idx = stoi(user_input); }
+        catch(invalid_argument) { cout << "Invalid argument" << endl; }
 
         // Input handler
         switch(input_idx) {
@@ -275,7 +285,9 @@ while(1) {
         cout << "|| [5] - Go to checkout                         ||" << endl;
         cout << "||                                              ||" << endl;
         cout << "==================================================" << endl;
-        cin >> user_input; input_idx = stoi(user_input);
+        cin >> user_input;
+        try { input_idx = stoi(user_input); }
+        catch(invalid_argument) { cout << "Invalid argument" << endl; }
 
         // Input handler
         switch(input_idx) {
@@ -319,7 +331,9 @@ while(1) {
         cout << "|| [3] - Return to menu                         ||" << endl;
         cout << "||                                              ||" << endl;
         cout << "==================================================" << endl;
-        cin >> user_input; input_idx = stoi(user_input);
+        cin >> user_input;
+        try { input_idx = stoi(user_input); }
+        catch(invalid_argument) { cout << "Invalid argument" << endl; }
 
         // Input handler
         switch(input_idx) {
