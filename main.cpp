@@ -19,7 +19,10 @@ vector<Menu::MenuItem> menuVector = {
     Menu::MenuItem (6, "large fries", 4),
     Menu::MenuItem (7, "coca-cola", 2),
     Menu::MenuItem (8, "fanta", 2),
-    Menu::MenuItem (9, "sprite", 2)
+    Menu::MenuItem (9, "sprite", 2),
+    Menu::MenuItem (10, "apple pie", 2),
+    Menu::MenuItem (11, "ice cream", 2),
+    Menu::MenuItem (12, "milkshake", 2)
     };
 Kitchen kitchen;
 Menu menu;
