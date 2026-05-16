@@ -11,25 +11,6 @@
 
 using namespace std;
 
-class Kiosk {
-    private:
-        int kioskID;
-
-    public:
-        bool kioskOutOfOrder;
-
-    Kiosk(int a, bool b) {
-        kioskID = a;
-        kioskOutOfOrder = b;
-    }
-
-    map<int,bool> returnKioskState() { // returns a map with the kiosk ID and its state
-        map<int,bool> tempMap;
-        tempMap.insert({kioskID, kioskOutOfOrder});
-        return tempMap;
-    }
-};
-
 class Menu {
     private:
 
@@ -51,19 +32,6 @@ class Menu {
         }
     };
     vector<Menu::MenuItem> menuVector;
-
-    /* PUT THIS INTO MAIN.CPP
-    vector<Menu::MenuItem> menuVector = {
-    Menu::MenuItem (1, "hamburger", 4),
-    Menu::MenuItem (2, "cheeseburger", 5),
-    Menu::MenuItem (3, "big mac", 6),
-    Menu::MenuItem (4, "small fries", 2),
-    Menu::MenuItem (5, "medium fries", 3),
-    Menu::MenuItem (6, "large fries", 4),
-    Menu::MenuItem (7, "coca-cola", 2),
-    Menu::MenuItem (8, "fanta", 2),
-    Menu::MenuItem (9, "sprite", 2)
-    };*/
 };
 
 class Kitchen {
@@ -95,12 +63,13 @@ class Kitchen {
 
 class OrderComposer {
     private:
-        vector<int> currentOrder; // one entry is one position in an order. a vector consists of a all item ids and dine in or out at the end
+        
         int currentOrderDineInStorage; // store dinein to later put it at the end of currentOrder vector. 1 for dine in, 0 for take out
         Menu& menu;
         Kitchen& kitchen;
         
     public:
+    /*private*/vector<int> currentOrder; // one entry is one position in an order. a vector consists of a all item ids and dine in or out at the end
     OrderComposer(Menu& m, Kitchen& k) : menu(m), kitchen(k) {} // inherit menuVector from MenuItem class and kitchenReceiveOrder from Kitchen class
 
     void receiveOrderPartID(int receivedOrderPartID){ // receive an ID of an item from the menu and add it to currentOrder
@@ -117,19 +86,20 @@ class OrderComposer {
     }
 
     int convertID2Price(int receivedID){ // given an ID, this looks through all defined class members and looks for a match to find the assigned price
-        for (const auto& item : menu.menuVector) {
-            if (item.menuID == receivedID) {
-                return item.menuPrice;
+     
+            for (int i = 0; i < menu.menuVector.size(); i++) {
+                if (menu.menuVector.at(i).menuID == receivedID) {
+                    return menu.menuVector.at(i).menuPrice;
+                }
             }
-        }
 
-        throw runtime_error("ID not found");
+        throw runtime_error("mcdonaldsCustomError: ID not found");
     };
     
     int returnCashTotal() {
     int cashTotal = 0;
 
-        for (int i = 0; i < currentOrder.size() - 1; i++)
+        for (int i = 0; i < currentOrder.size(); i++)
         {
             cashTotal += convertID2Price(currentOrder[i]);
         }
