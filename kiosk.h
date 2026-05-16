@@ -39,11 +39,10 @@ class Kitchen {
     map<int,vector<int>> orderStorage; //int order number, vector with ordered items (items have numerical IDs), int total $, int dine in or out
 
     public:
-    int incomingOrderID = 0;
+    int incomingOrderID = 1;
 
     void kitchenReceiveOrder(vector<int> incomingOrderContent) { 
-        orderStorage.insert({incomingOrderID, incomingOrderContent});
-        incomingOrderID++;
+        orderStorage.insert({incomingOrderID++, incomingOrderContent});
     }
 
     void kitchenEraseOrder(int orderID) { // erase the order with the given ID
@@ -69,7 +68,7 @@ class OrderComposer {
         Kitchen& kitchen;
         
     public:
-    /*private*/vector<int> currentOrder; // one entry is one position in an order. a vector consists of a all item ids and dine in or out at the end
+    vector<int> currentOrder; // one entry is one position in an order. a vector consists of a all item ids and dine in or out at the end
     OrderComposer(Menu& m, Kitchen& k) : menu(m), kitchen(k) {} // inherit menuVector from MenuItem class and kitchenReceiveOrder from Kitchen class
 
     void receiveOrderPartID(int receivedOrderPartID){ // receive an ID of an item from the menu and add it to currentOrder
@@ -79,6 +78,8 @@ class OrderComposer {
     void receiveOrderPartDineIn(int receivedOrderPartDineIn){ // 1 for dine in, 0 for take out
         currentOrderDineInStorage = receivedOrderPartDineIn;
     }
+
+    int getOrderPartDineIn() { return currentOrderDineInStorage; }
 
     void finishOrder() { // add dine in or out to the end of the order vector
         currentOrder.push_back(currentOrderDineInStorage);
@@ -123,6 +124,14 @@ class OrderComposer {
         currentOrder.clear();
 
         kitchen.kitchenReceiveOrder(composedOrder); // send the composed order to the kitchen
+    }
+
+    string convertID2Name(int ID) {
+        for(auto item : menu.menuVector) {
+            if(item.menuID == ID) {
+                return item.menuItem;
+            }
+        }
     }
 };
 
