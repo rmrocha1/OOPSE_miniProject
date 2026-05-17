@@ -9,15 +9,19 @@ using namespace std;
 
 // Global variables
 int current_menu_idx = 1;
+int previous_menu_idx = 1;
 string user_input = "";
 int input_idx = 0;
 string itemName;
 int itemPrice;
 time_t timestamp;
 string timestamp_out;
+int order_id;
+vector<int>* pOrder;
 
 Menu menu;
 vector<Menu::MenuItem> menuVector = {
+    Menu::MenuItem (0, "Take Out Packaging", 4),
     Menu::MenuItem (1, "Hamburger", 4),
     Menu::MenuItem (2, "Cheeseburger", 5),
     Menu::MenuItem (3, "BigMac", 6),
@@ -27,18 +31,33 @@ vector<Menu::MenuItem> menuVector = {
     Menu::MenuItem (7, "Coca-Cola", 2),
     Menu::MenuItem (8, "Fanta", 2),
     Menu::MenuItem (9, "Sprite", 2),
-    Menu::MenuItem(10,"Apple Pie",2),
-    Menu::MenuItem(11,"Ice Cream",2),
-    Menu::MenuItem(12,"Milkshake",4)
+    Menu::MenuItem (10,"Apple Pie",2),
+    Menu::MenuItem (11,"Ice Cream",2),
+    Menu::MenuItem (12,"Milkshake",4)
     };
 Kitchen kitchen;
 
 OrderComposer order_composer(menu,kitchen);
 
 // Global functions
+void delay() { for(int i = 0; i < 1000000000; i++) {} }
+
 void invalidInput() {
     system("cls");
     cout << "Error: invalid input" << endl;
+    delay();
+}
+
+void cancelOrder() {
+    order_composer.clearOrder();
+    current_menu_idx = 1;
+    system("cls");
+    cout << "==================================================" << endl;
+    cout << "||                                              ||" << endl;
+    cout << "||                ORDER CANCELED                ||" << endl;
+    cout << "||                                              ||" << endl;
+    cout << "==================================================" << endl;
+    delay();
 }
 
 int orderOfMagnitude(int a) {
@@ -76,6 +95,19 @@ void displayOrder() {
     }
 }
 
+void displayAllOrders() {
+    for(int i = 1; i <= kitchen.getNumOfOrders(); i++) {
+        cout << "|| [" << i << "] - Order #" << kitchen.getOrderID(i);
+        for(int j = 0; j < 32 - orderOfMagnitude(i); j++) { cout << " "; } cout << "||" << endl;
+    }
+}
+
+void getInput(int* pINPUT_HANDLER) {
+    string sINPUT;
+    try { cin >> sINPUT; *pINPUT_HANDLER = stoi(sINPUT); }
+    catch(...) { invalidInput(); }
+}
+
 int main() {
 menu.menuVector = menuVector;
 while(1) {
@@ -98,8 +130,7 @@ while(1) {
         cout << "|| [3] - Kitchen (protected)                    ||" << endl;
         cout << "||                                              ||" << endl;
         cout << "==================================================" << endl;
-        try { cin >> user_input; input_idx = stoi(user_input); }
-        catch(...) { invalidInput(); }
+        getInput(&input_idx);
 
         // Input handler
         switch(input_idx) {
@@ -122,6 +153,7 @@ while(1) {
             break;
         }
 
+        previous_menu_idx = 1;
         system("cls");
         break;
 
@@ -137,8 +169,9 @@ while(1) {
         cout << "|| [3] - Beverages                              ||" << endl;
         cout << "|| [4] - Desserts                               ||" << endl;
         cout << "||                                              ||" << endl;
-        cout << "|| [5] - Restart order                          ||" << endl;
-        cout << "|| [6] - Go to checkout                         ||" << endl;
+        cout << "|| [5] - Remove items from cart                 ||" << endl;
+        cout << "|| [6] - Restart order                          ||" << endl;
+        cout << "|| [7] - Go to checkout                         ||" << endl;
         cout << "||                                              ||" << endl;
         cout << "||==============================================||" << endl;
         cout << "||                                              ||" << endl;
@@ -147,8 +180,7 @@ while(1) {
         displayOrder();
         cout << "||                                              ||" << endl;
         cout << "==================================================" << endl;
-        try { cin >> user_input; input_idx = stoi(user_input); }
-        catch(...) { invalidInput(); }
+        getInput(&input_idx);
 
         // Input handler
         switch(input_idx) {
@@ -169,11 +201,14 @@ while(1) {
             current_menu_idx = 6;
             break;
             case 5:
-            // Restart program and empty cart
-            current_menu_idx = 1;
-            order_composer.clearOrder();
+            // Go to order editing menu
+            current_menu_idx = 11;
             break;
             case 6:
+            // Restart program and empty cart
+            cancelOrder();
+            break;
+            case 7:
             // Go to checkout menu (index 7)
             current_menu_idx = 7;
             break;
@@ -182,6 +217,7 @@ while(1) {
             break;
         }
 
+        previous_menu_idx = 2;
         system("cls");
         break;
 
@@ -205,8 +241,7 @@ while(1) {
         displayOrder();
         cout << "||                                              ||" << endl;
         cout << "==================================================" << endl;
-        try { cin >> user_input; input_idx = stoi(user_input); }
-        catch(...) { invalidInput(); }
+        getInput(&input_idx);
 
         // Input handler
         switch(input_idx) {
@@ -235,6 +270,7 @@ while(1) {
             break;
         }
 
+        previous_menu_idx = 3;
         system("cls");
         break;
 
@@ -258,8 +294,7 @@ while(1) {
         displayOrder();
         cout << "||                                              ||" << endl;
         cout << "==================================================" << endl;
-        try { cin >> user_input; input_idx = stoi(user_input); }
-        catch(...) { invalidInput(); }
+        getInput(&input_idx);
 
         // Input handler
         switch(input_idx) {
@@ -288,6 +323,7 @@ while(1) {
             break;
         }
 
+        previous_menu_idx = 4;
         system("cls");
         break;
 
@@ -311,8 +347,7 @@ while(1) {
         displayOrder();
         cout << "||                                              ||" << endl;
         cout << "==================================================" << endl;
-        try { cin >> user_input; input_idx = stoi(user_input); }
-        catch(...) { invalidInput(); }
+        getInput(&input_idx);
 
         // Input handler
         switch(input_idx) {
@@ -341,6 +376,7 @@ while(1) {
             break;
         }
 
+        previous_menu_idx = 5;
         system("cls");
         break;
 
@@ -364,8 +400,7 @@ while(1) {
         displayOrder();
         cout << "||                                              ||" << endl;
         cout << "==================================================" << endl;
-        try { cin >> user_input; input_idx = stoi(user_input); }
-        catch(...) { invalidInput(); }
+        getInput(&input_idx);
 
         // Input handler
         switch(input_idx) {
@@ -394,6 +429,7 @@ while(1) {
             break;
         }
 
+        previous_menu_idx = 6;
         system("cls");
         break;
 
@@ -410,11 +446,11 @@ while(1) {
         cout << "||                                              ||" << endl;
         cout << "|| [1] - Pay and finish                         ||" << endl;
         cout << "|| [2] - Cancel order                           ||" << endl;
-        cout << "|| [3] - Add more to order                      ||" << endl;
+        cout << "|| [3] - Remove items from order                ||" << endl;
+        cout << "|| [4] - Add more to order                      ||" << endl;
         cout << "||                                              ||" << endl;
         cout << "==================================================" << endl;
-        try { cin >> user_input; input_idx = stoi(user_input); }
-        catch(...) { invalidInput(); }
+        getInput(&input_idx);
 
         // Input handler
         switch(input_idx) {
@@ -424,17 +460,13 @@ while(1) {
             break;
             case 2:
             // Clear order and display cancelled order message (index 9)
-            order_composer.clearOrder();
-            current_menu_idx = 1;
-            system("cls");
-            cout << "==================================================" << endl;
-            cout << "||                                              ||" << endl;
-            cout << "||                ORDER CANCELED                ||" << endl;
-            cout << "||                                              ||" << endl;
-            cout << "==================================================" << endl;
-            for(int i = 0; i < 1000000000; i++) {}
+            cancelOrder();
             break;
             case 3:
+            // Go to order edit menu
+            current_menu_idx = 11;
+            break;
+            case 4:
             // Go to main menu (index 2)
             current_menu_idx = 2;
             break;
@@ -443,6 +475,7 @@ while(1) {
             break;
         }
 
+        previous_menu_idx = 7;
         system("cls");
         break;
 
@@ -456,9 +489,9 @@ while(1) {
         cout << "==================================================" << endl;
         cout << "||                                              ||" << endl;
         cout << "||";
-        for(int i = 0; i < (30 - orderOfMagnitude(kitchen.incomingOrderID))/2; i++) { cout << " "; }
-        cout << "RECEIT OF ORDER #" << kitchen.incomingOrderID;
-        for(int i = 0; i < (30 - orderOfMagnitude(kitchen.incomingOrderID))/2; i++) { cout << " "; }
+        for(int i = 0; i < (29 - orderOfMagnitude(kitchen.incomingOrderID))/2; i++) { cout << " "; }
+        cout << "RECEIPT OF ORDER #" << kitchen.incomingOrderID;
+        for(int i = 0; i < (28 - orderOfMagnitude(kitchen.incomingOrderID))/2; i++) { cout << " "; }
         cout << "||" << endl;
         cout << "||                                              ||" << endl;
         if(order_composer.getOrderPartDineIn() == 1) {
@@ -473,12 +506,10 @@ while(1) {
         cout << "||                                              ||" << endl;
         cout << "==================================================" << endl;
         cout << "Press [1] to finish: ";
-        try { cin >> user_input; input_idx = stoi(user_input); }
-        catch(...) { invalidInput(); }
+        getInput(&input_idx);
         if(input_idx == 1) {
             current_menu_idx = 1;
             order_composer.finishOrder();
-            // order_composer.composeOrder();
             }
         else { invalidInput(); }
 
@@ -493,8 +524,7 @@ while(1) {
         cout << "||   Enter the password or press [0] to exit    ||" << endl;
         cout << "||                                              ||" << endl;
         cout << "==================================================" << endl;
-        try { cin >> user_input; input_idx = stoi(user_input); }
-        catch(...) { invalidInput(); }
+        getInput(&input_idx);
 
         if(input_idx == 1234) {
             // Go to kitchen page
@@ -509,8 +539,10 @@ while(1) {
             cout << "||                WRONG PASSWORD                ||" << endl;
             cout << "||                                              ||" << endl;
             cout << "==================================================" << endl;
+            delay();
         }
-        for(int i = 0; i < 1000000000; i++) {}
+
+        system("cls");
         break;
 
         case 10:
@@ -518,9 +550,160 @@ while(1) {
         // Kitchen main menu
         cout << "==================================================" << endl;
         cout << "||                                              ||" << endl;
-        cout << "||              under construction              ||" << endl;
+        cout << "||       It's always a good day to work         ||" << endl;
+        cout << "||       at McDonald's!                         ||" << endl;
         cout << "||                                              ||" << endl;
-        cout << "==================================================" << endl;        
+        cout << "|| [1] - View an order                          ||" << endl;
+        cout << "|| [2] - Delete an order                        ||" << endl;
+        cout << "|| [3] - See all orders                         ||" << endl;
+        cout << "||                                              ||" << endl;
+        cout << "|| [4] - Exit                                   ||" << endl;
+        cout << "||                                              ||" << endl;
+        cout << "==================================================" << endl;
+        getInput(&input_idx);
+
+        // Input handler
+        switch(input_idx) {
+            case 1:
+            // Open order viewing menu
+            current_menu_idx = 12;
+            break;
+            case 2:
+            // Open order deleting menu
+            current_menu_idx = 13;
+            break;
+            case 3:
+            // Print all orders in redeable format
+            current_menu_idx = 14;
+            break;
+            case 4:
+            // Return to home page and clear current cart
+            current_menu_idx = 1;
+            order_composer.clearOrder();
+            break;
+            default:
+            invalidInput();
+            break;
+        }
+
+        previous_menu_idx = 10;
+        system("cls");
+        break;
+
+        case 11:
+
+        // Edit order menu
+        cout << "==================================================" << endl;
+        cout << "||                                              ||" << endl;
+        cout << "||         Select items to remove them          ||" << endl;
+        cout << "||         from your order                      ||" << endl;
+        cout << "||                                              ||" << endl;
+
+        if(order_composer.currentOrder.size() != 0) {
+        for(int i = 0; i < order_composer.currentOrder.size(); i++) {
+        cout << "|| [" << i + 1 << "] - " << order_composer.convertID2Name(order_composer.currentOrder.at(i));
+        for(int j = 0; j < (34 - order_composer.convertID2Name(order_composer.currentOrder.at(i)).size() - orderOfMagnitude(i + 1) - orderOfMagnitude(order_composer.convertID2Price(order_composer.currentOrder.at(i)))); j++)
+        { cout << " "; } cout << "$ " << order_composer.convertID2Price(order_composer.currentOrder.at(i)) << ".00 ||" << endl;
+        }
+        cout << "||- - - - - - - - - - - - - - - - - - - - - - - ||" << endl;
+        cout << "|| Order total:";
+        for(int i = 0; i < (27 - orderOfMagnitude(order_composer.returnCashTotal())); i++)
+        { cout << " "; } cout << "$ " << order_composer.returnCashTotal() << ".00 ||" << endl;
+        } else {
+        cout << "|| Your cart is empty...                        ||" << endl;
+        }
+        cout << "||                                              ||" << endl;
+        cout << "|| [0] - Back                                   ||" << endl;
+        cout << "||                                              ||" << endl;
+        cout << "==================================================" << endl;
+        getInput(&input_idx);
+
+        // Input handler
+        if ( input_idx > order_composer.currentOrder.size() || input_idx < 0 ) { invalidInput(); }
+        else {
+            if (input_idx == 0) { current_menu_idx = previous_menu_idx; }
+            else { order_composer.removeItem(input_idx); }
+        }
+
+        system("cls");
+        break;
+
+        case 12:
+
+        // Selecct order to print
+        cout << "==================================================" << endl;
+        cout << "||                                              ||" << endl;
+        cout << "||            Select order to view              ||" << endl;
+        cout << "||                                              ||" << endl;
+        displayAllOrders();
+        cout << "||                                              ||" << endl;
+        cout << "|| [0] - Back                                   ||" << endl;
+        cout << "||                                              ||" << endl;
+        cout << "==================================================" << endl;
+        getInput(&input_idx);
+
+        if(input_idx == 0) { current_menu_idx = previous_menu_idx; }
+        else {
+        system("cls");
+        order_id = kitchen.getOrderID(input_idx);
+        pOrder = kitchen.getOrder(order_id);
+        
+        cout << "==================================================" << endl;
+        cout << "||                                              ||" << endl;
+        cout << "||";
+        for(int i = 0; i < (29 - orderOfMagnitude(order_id))/2; i++) { cout << " "; }
+        cout << "RECEIPT OF ORDER #" << order_id;
+        for(int i = 0; i < (28 - orderOfMagnitude(order_id))/2; i++) { cout << " "; }
+        cout << "||" << endl;
+        cout << "||                                              ||" << endl;
+        if(*(pOrder -> end() - 2) == 1) {
+        cout << "|| Dine in                                      ||" << endl;
+        } else {
+        cout << "|| Take out                                     ||" << endl;
+        }
+        cout << "||                                              ||" << endl;
+        order_composer.readOrder(pOrder);
+        order_composer.currentOrder.erase(order_composer.currentOrder.end() - 2, order_composer.currentOrder.end());
+        displayOrder();
+        cout << "||                                              ||" << endl;
+        cout << "|| " << timestamp_out << "                     ||" << endl;
+        cout << "||                                              ||" << endl;
+        cout << "==================================================" << endl;
+        cout << "Press [1] to go back: ";
+        getInput(&input_idx);
+        if(input_idx == 1) { } else { invalidInput(); }
+        }
+
+        system("cls");
+        break;
+
+        case 13:
+
+        // Selecct order to print
+        cout << "==================================================" << endl;
+        cout << "||                                              ||" << endl;
+        cout << "||           Select order to delete             ||" << endl;
+        cout << "||                                              ||" << endl;
+        displayAllOrders();
+        cout << "||                                              ||" << endl;
+        cout << "|| [0] - Back                                   ||" << endl;
+        cout << "||                                              ||" << endl;
+        cout << "==================================================" << endl;
+        getInput(&input_idx);
+
+        if(input_idx == 0) { current_menu_idx = previous_menu_idx; }
+        else if(input_idx > kitchen.getNumOfOrders()) { invalidInput(); }
+        else { kitchen.kitchenEraseOrder(kitchen.getOrderID(input_idx)); }
+
+        system("cls");
+        break;
+
+        case 14:
+
+        // Print all orders in readable format (unreadable for testing)
+        kitchen.coutOrders();
+        getInput(&input_idx);
+        if(input_idx == 1) { current_menu_idx = previous_menu_idx; } else { invalidInput(); }
 
         system("cls");
         break;

@@ -49,6 +49,18 @@ class Kitchen {
         orderStorage.erase(orderID);
     }
 
+    vector<int>* getOrder(int ID) { return &orderStorage.at(ID); }
+
+    int getOrderID(int POS) {
+        int i = 1;
+        for(auto order : orderStorage ) {
+            if( POS == i) { return order.first; }
+            else { i++; }
+        }
+    }
+
+    int getNumOfOrders() { return orderStorage.size(); }
+
     void coutOrders() { // show all orders currently in storage
         for (auto x : orderStorage) {
             cout << "Order ID: " << x.first << " Order content: ";
@@ -94,7 +106,7 @@ class OrderComposer {
                 }
             }
 
-        throw runtime_error("mcdonaldsCustomError: ID not found");
+        throw runtime_error("mcdonaldsCustomError: ID " + to_string(receivedID) + " not found");
     };
     
     int returnCashTotal() {
@@ -119,7 +131,7 @@ class OrderComposer {
             composedOrder.push_back(currentOrder[i]);
         }
 
-        composedOrder.push_back(returnCashTotal()); // complete the order vector by adding the cash total
+        composedOrder.push_back(returnCashTotal() - 4); // complete the order vector by adding the cash total
 
         currentOrder.clear();
 
@@ -131,6 +143,15 @@ class OrderComposer {
             if(item.menuID == ID) {
                 return item.menuItem;
             }
+        }
+    }
+
+    void removeItem(int POS) { currentOrder.erase(currentOrder.begin() + POS - 1); }
+
+    void readOrder(vector<int>* ORDER) {
+        currentOrder.clear();
+        for(int i = 0; i < ORDER -> size(); i++) {
+            currentOrder.push_back(ORDER -> at(i));
         }
     }
 };
